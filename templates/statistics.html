@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="sidebar">
+            <h2>Dashboard</h2>
+            <nav>
+                <a href="/">Scraping</a>
+                <a href="/statistics" class="active">Statistics</a>
+            </nav>
+        </div>
+
+        <div class="main-content">
+            <h1><span class="icon">📊</span> Statistics</h1>
+
+            <!-- Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Images Scraped</h3>
+                    <p id="total-images">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Unique Searches</h3>
+                    <p id="unique-searches">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Most Popular Search</h3>
+                    <p id="popular-search">N/A</p>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts">
+                <div class="chart-card">
+                    <h3>Images Scraped Over Time</h3>
+                    <canvas id="barChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Search Term Distribution</h3>
+                    <canvas id="pieChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='statistics.js') }}"></script>
+</body>
+</html>

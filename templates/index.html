@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Scraper</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>Dashboard</h2>
+            <nav>
+                <a href="/" class="active">Scraping</a>
+                <a href="/statistics">Statistics</a> <!-- Link to Statistics Page -->
+            </nav>
+        </div>
+
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header Metrics -->
+            <div class="header">
+                <div class="metric-card">
+                    <h3>CPU</h3>
+                    <div class="progress-bar"><span style="width: 30%;"></span></div>
+                </div>
+                <div class="metric-card">
+                    <h3>RAM</h3>
+                    <div class="progress-bar"><span style="width: 60%;"></span></div>
+                </div>
+                <div class="metric-card">
+                    <h3>Proxy Speed</h3>
+                    <div class="progress-bar"><span style="width: 80%;"></span></div>
+                </div>
+            </div>
+
+            <!-- Search Form -->
+            <div class="search-card">
+                <h3>Scrape Images</h3>
+                <form id="scrape-form">
+                    <label for="query">Search Term:</label>
+                    <input type="text" id="query" name="query" placeholder="e.g., Cats, Nature" required>
+
+                    <label for="num_images">Number of Images:</label>
+                    <input type="number" id="num_images" name="num_images" min="1" value="10" required>
+
+                    <label for="min_width">Min Width (px):</label>
+                    <input type="number" id="min_width" name="min_width" min="0" value="0" placeholder="e.g., 500">
+
+                    <label for="min_height">Min Height (px):</label>
+                    <input type="number" id="min_height" name="min_height" min="0" value="0" placeholder="e.g., 500">
+
+                    <label for="max_width">Max Width (px):</label>
+                    <input type="number" id="max_width" name="max_width" min="1" value="5000" placeholder="e.g., 1920">
+
+                    <label for="max_height">Max Height (px):</label>
+                    <input type="number" id="max_height" name="max_height" min="1" value="5000" placeholder="e.g., 1080">
+
+                    <button type="submit">Scrape Images</button>
+                </form>
+            </div>
+
+            <!-- Results Section -->
+            <div class="platform-card" id="results">
+            <h3>Scraped Images</h3>
+            <div id="image-list" class="image-grid"></div>
+            <button id="download-selected" style="display: none;">Download Selected Images</button>
+        </div>
+
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
