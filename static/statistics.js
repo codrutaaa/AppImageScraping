@@ -59,3 +59,25 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.error("Error fetching statistics:", error);
     }
 });
+
+document.getElementById("download-statistics").addEventListener("click", async () => {
+    try {
+        const response = await fetch("/download-statistics");
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "statistics.csv";
+            a.click();
+
+            window.URL.revokeObjectURL(url);
+        } else {
+            console.error("Failed to download statistics");
+        }
+    } catch (error) {
+        console.error("Error downloading statistics:", error);
+    }
+});
+

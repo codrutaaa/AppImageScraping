@@ -1,16 +1,26 @@
 document.getElementById("scrape-form").addEventListener("submit", async function (event) {
     event.preventDefault();
 
-    const query = document.getElementById("query").value;
-    const num_images = document.getElementById("num_images").value;
-    const min_width = document.getElementById("min_width").value;
-    const min_height = document.getElementById("min_height").value;
-    const max_width = document.getElementById("max_width").value;
-    const max_height = document.getElementById("max_height").value;
+    const query = document.getElementById("query").value.trim();
+    const num_images = parseInt(document.getElementById("num_images").value);
+    const style = document.getElementById("style").value;
+    const use_case = document.getElementById("use_case").value;
+
+    const categories = Array.from(
+        document.querySelectorAll("input[name='categories']:checked")
+    ).map(checkbox => checkbox.value);
+
+    const min_width = parseInt(document.getElementById("min_width").value) || 0;
+    const min_height = parseInt(document.getElementById("min_height").value) || 0;
+    const max_width = parseInt(document.getElementById("max_width").value) || 5000;
+    const max_height = parseInt(document.getElementById("max_height").value) || 5000;
 
     const data = {
         query,
         num_images,
+        style,
+        use_case,
+        categories,
         min_width,
         min_height,
         max_width,
@@ -20,46 +30,38 @@ document.getElementById("scrape-form").addEventListener("submit", async function
     try {
         const response = await fetch("/scrape-images", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
         });
 
-        const result = await response.json();
+        if (response.ok) {
+            const result = await response.json();
+            const imageList = document.getElementById("image-list");
+            imageList.innerHTML = "";
 
-        // Clear previous images
-        const imageList = document.getElementById("image-list");
-        imageList.innerHTML = "";
-
-        if (result.status === "success") {
-            result.images.forEach((imagePath, index) => {
+            // Add checkboxes and images
+            result.images.forEach(image => {
                 const container = document.createElement("div");
                 container.classList.add("image-container");
 
-                const img = document.createElement("img");
-                img.src = imagePath;
-                img.alt = "Scraped Image";
+                const imgElement = document.createElement("img");
+                imgElement.src = image;
+                imgElement.alt = "Scraped Image";
+                imgElement.classList.add("scraped-image");
 
                 const checkbox = document.createElement("input");
                 checkbox.type = "checkbox";
-                checkbox.value = imagePath;
-                checkbox.id = `image-${index}`;
+                checkbox.value = image;
                 checkbox.classList.add("image-checkbox");
 
-                const label = document.createElement("label");
-                label.htmlFor = `image-${index}`;
-                label.textContent = "Select";
-
-                container.appendChild(img);
+                container.appendChild(imgElement);
                 container.appendChild(checkbox);
-                container.appendChild(label);
                 imageList.appendChild(container);
             });
 
             document.getElementById("download-selected").style.display = "block";
         } else {
-            alert("Error: " + result.message);
+            console.error("Error:", response.statusText);
         }
     } catch (error) {
         console.error("Error:", error);
@@ -67,35 +69,34 @@ document.getElementById("scrape-form").addEventListener("submit", async function
 });
 
 document.getElementById("download-selected").addEventListener("click", async function () {
-    const selectedImages = Array.from(document.querySelectorAll(".image-checkbox:checked")).map(
-        (checkbox) => checkbox.value
-    );
+    const selectedImages = Array.from(
+        document.querySelectorAll(".image-checkbox:checked")
+    ).map(checkbox => checkbox.value);
 
     if (selectedImages.length === 0) {
-        alert("No images selected!");
+        alert("No images selected for download!");
         return;
     }
 
     try {
         const response = await fetch("/download-selected", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ images: selectedImages })
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ images: selectedImages }),
         });
 
-        if (response.status === 200) {
+        if (response.ok) {
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
+
             const a = document.createElement("a");
             a.href = url;
             a.download = "selected_images.zip";
-            document.body.appendChild(a);
             a.click();
-            a.remove();
+
+            window.URL.revokeObjectURL(url);
         } else {
-            alert("Failed to download selected images.");
+            console.error("Error:", response.statusText);
         }
     } catch (error) {
         console.error("Error:", error);

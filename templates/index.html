@@ -47,6 +47,32 @@
                     <label for="num_images">Number of Images:</label>
                     <input type="number" id="num_images" name="num_images" min="1" value="10" required>
 
+                    <label for="style">Style:</label>
+                    <select id="style" name="style">
+                        <option value="">-- Select Style --</option>
+                        <option value="cute">Cute</option>
+                        <option value="dark">Dark</option>
+                        <option value="minimalistic">Minimalistic</option>
+                        <option value="vivid">Vivid</option>
+                    </select>
+
+                    <label for="use_case">Use Case:</label>
+                    <select id="use_case" name="use_case">
+                        <option value="">-- Select Use Case --</option>
+                        <option value="meme">Meme</option>
+                        <option value="wallpaper">Wallpaper</option>
+                        <option value="banner">Banner</option>
+                        <option value="presentation">Presentation</option>
+                    </select>
+
+                    <label>Categories:</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="categories" value="nature"> Nature</label>
+                        <label><input type="checkbox" name="categories" value="animals"> Animals</label>
+                        <label><input type="checkbox" name="categories" value="fantasy"> Fantasy</label>
+                        <label><input type="checkbox" name="categories" value="technology"> Technology</label>
+                    </div>
+
                     <label for="min_width">Min Width (px):</label>
                     <input type="number" id="min_width" name="min_width" min="0" value="0" placeholder="e.g., 500">
 
@@ -60,15 +86,18 @@
                     <input type="number" id="max_height" name="max_height" min="1" value="5000" placeholder="e.g., 1080">
 
                     <button type="submit">Scrape Images</button>
+                    <button id="refresh-images" type="button" style="display: none;">Refresh Images</button>
                 </form>
             </div>
 
+
             <!-- Results Section -->
             <div class="platform-card" id="results">
-            <h3>Scraped Images</h3>
-            <div id="image-list" class="image-grid"></div>
-            <button id="download-selected" style="display: none;">Download Selected Images</button>
-        </div>
+                <h3>Scraped Images</h3>
+                <div id="image-list" class="image-grid"></div>
+                <button id="download-selected" style="display: none;">Download Selected Images</button>
+            </div>
+
 
         </div>
     </div>
